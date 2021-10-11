@@ -1,0 +1,15 @@
+1. How much of a difference did the .cache() make in your Reddit ETL code?
+For reddit-3 dataset,
+Without cache: real    0m44.430s
+With cache: real   0m34.032s
+
+2.When would .cache() make code slower than without?
+Unnecessary use of cache can make the code slower.
+For example, in my code I used .cache() for storing the filtered data for later processing and processing more than once.
+But if I used .cache() when loading the data, it would make the code slower unnecessarily.
+
+3.Under what conditions will the broadcast join be faster than an actual join?
+Once a value is broadcasted, then it is sent to each executor. Any function can access the .value property of it. As a result broadcast join are faster than an actual join
+
+4.When will the broadcast join be slower?
+When we broadcast large amount of data then all the executors will be overloaded and making the system slower instead of faster.
