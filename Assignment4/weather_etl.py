@@ -17,13 +17,13 @@ def main(inputs, output):
     types.StructField('obstime', types.StringType()),
 ])
 
-weather = spark.read.csv(inputs, schema=observation_schema)
-filtered_qflag_data = weather.filter(weather.qflag.isNull())
-filter_station_data = filtered_qflag_data.filter(filtered_qflag_data.station.startswith('CA'))
-filter_observed_data = filter_station_data.filter(filter_station_data.observation.isin('TMAX'))
-filter_centrigrade = filter_observed_data.withColumn('tmax',filter_observed_data.value / 10)
-etl_data = filter_centrigrade.select('station','date','tmax')
-etl_data.write.json(output, compression='gzip', mode='overwrite')
+    weather = spark.read.csv(inputs, schema=observation_schema)
+    filtered_qflag_data = weather.filter(weather.qflag.isNull())
+    filter_station_data = filtered_qflag_data.filter(filtered_qflag_data.station.startswith('CA'))
+    filter_observed_data = filter_station_data.filter(filter_station_data.observation.isin('TMAX'))
+    filter_centrigrade = filter_observed_data.withColumn('tmax',filter_observed_data.value / 10)
+    etl_data = filter_centrigrade.select('station','date','tmax')
+    etl_data.write.json(output, compression='gzip', mode='overwrite')
 
 if __name__ == '__main__':
     inputs = sys.argv[1]
